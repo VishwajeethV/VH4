@@ -16,7 +16,86 @@
 </head>
 
 <body>
+<!-- ==========================================
+MISSION TIMELINE
+========================================== -->
 
+<div id="flightTimeline">
+
+    <svg id="timelineSVG"
+         viewBox="0 0 200 1200"
+         preserveAspectRatio="none">
+
+        <!-- Flight Path -->
+
+        <path
+            id="flightPath"
+
+            d="
+            M100 1120
+            C100 980,
+            80 820,
+            60 650
+
+            C45 500,
+            60 360,
+            100 240
+
+            C130 150,
+            145 100,
+            160 40
+            "
+
+            stroke="#444"
+            stroke-width="4"
+
+            fill="none"
+
+            stroke-linecap="round"/>
+
+    </svg>
+
+
+    <!-- Rocket -->
+
+    <div id="timelineRocket">
+
+        🚀
+
+    </div>
+
+
+    <!-- Milestones -->
+
+    <div class="marker launch">
+        Launch
+    </div>
+
+    <div class="marker maxq">
+        Max-Q
+    </div>
+
+    <div class="marker cutoff">
+        MECO
+    </div>
+
+    <div class="marker apogee">
+        120 km
+    </div>
+
+    <div class="marker zerog">
+        Zero-G
+    </div>
+
+    <div class="marker entry">
+        Re-entry
+    </div>
+
+    <div class="marker landing">
+        Landing
+    </div>
+
+</div>
 <div id="stars"></div>
 
 <header>
