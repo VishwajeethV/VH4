@@ -1,277 +1,559 @@
-/* ==========================================
-   VH4 Aerospace
-   Mission Controller v1
-========================================== */
+// ======================================================
+// VH4 Aerospace
+// script.js
+// Part 1
+// ======================================================
 
-const rocket = document.querySelector(".rocket");
+document.addEventListener("DOMContentLoaded", () => {
 
-const hero = document.querySelector(".hero");
+    //--------------------------------------------------
+    // Elements
+    //--------------------------------------------------
 
-let lastScroll = 0;
+    const sections = document.querySelectorAll(".panel");
 
-window.addEventListener("scroll", ()=>{
+    const dots = document.querySelectorAll(".scroll-dots span");
 
-    const scroll =
-        window.pageYOffset;
+    const navLinks = document.querySelectorAll("nav a");
 
-    const max =
-        document.body.scrollHeight -
-        window.innerHeight;
+    //--------------------------------------------------
+    // Add fade class automatically
+    //--------------------------------------------------
 
-    const progress =
-        scroll / max;
+    sections.forEach(section => {
 
-    /* ----------------------------
-       Rocket Lift
-    ----------------------------- */
+        section.classList.add("fade");
 
-    rocket.style.transform =
-        `translateY(${-progress*600}px)
-         rotate(${progress*12}deg)`;
+    });
 
-    /* ----------------------------
-       Hero Fade
-    ----------------------------- */
+    //--------------------------------------------------
+    // Fade Observer
+    //--------------------------------------------------
 
-    hero.style.opacity =
-        1-progress*0.6;
+    const fadeObserver = new IntersectionObserver((entries)=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+            }
+
+        });
+
+    },{
+
+        threshold:.20
+
+    });
+
+    sections.forEach(section=>{
+
+        fadeObserver.observe(section);
+
+    });
+
+    //--------------------------------------------------
+    // Active Navigation
+    //--------------------------------------------------
+
+    const sectionObserver = new IntersectionObserver((entries)=>{
+
+        entries.forEach(entry=>{
+
+            if(!entry.isIntersecting) return;
+
+            const id = entry.target.id;
+
+            //------------------------------
+
+            navLinks.forEach(link=>{
+
+                link.classList.remove("active");
+
+                if(link.getAttribute("href")==="#" + id){
+
+                    link.classList.add("active");
+
+                }
+
+            });
+
+            //------------------------------
+
+            dots.forEach(dot=>dot.classList.remove("active"));
+
+            sections.forEach((section,index)=>{
+
+                if(section.id===id){
+
+                    if(dots[index]){
+
+                        dots[index].classList.add("active");
+
+                    }
+
+                }
+
+            });
+
+        });
+
+    },{
+
+        threshold:.55
+
+    });
+
+    sections.forEach(section=>{
+
+        sectionObserver.observe(section);
+
+    });
+
+    //--------------------------------------------------
+    // Scroll Dots
+    //--------------------------------------------------
+
+    dots.forEach((dot,index)=>{
+
+        dot.addEventListener("click",()=>{
+
+            sections[index].scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+        });
+
+    });
+
+    //--------------------------------------------------
+    // Navbar Smooth Scroll
+    //--------------------------------------------------
+
+    navLinks.forEach(link=>{
+
+        link.addEventListener("click",(e)=>{
+
+            e.preventDefault();
+
+            const target=document.querySelector(
+
+                link.getAttribute("href")
+
+            );
+
+            if(target){
+
+                target.scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            }
+
+        });
+
+    });
+
+    //--------------------------------------------------
+    // Counter Animation
+    //--------------------------------------------------
+
+    const counters=document.querySelectorAll(".counter");
+
+    function animateCounter(counter){
+
+        const finalText=counter.innerText;
+
+        const number=parseInt(finalText);
+
+        if(isNaN(number)) return;
+
+        let value=0;
+
+        const step=Math.max(1,
+
+            Math.ceil(number/80)
+
+        );
+
+        const timer=setInterval(()=>{
+
+            value+=step;
+
+            if(value>=number){
+
+                value=number;
+
+                clearInterval(timer);
+
+            }
+
+            counter.innerText=value+
+
+            (finalText.includes("+")?"+":"");
+
+        },18);
+
+    }
+
+    const counterObserver=new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                animateCounter(entry.target);
+
+                counterObserver.unobserve(entry.target);
+
+            }
+
+        });
+
+    },{
+
+        threshold:.5
+
+    });
+
+    counters.forEach(counter=>{
+
+        counterObserver.observe(counter);
+
+    });
+
+    //--------------------------------------------------
+    // Progress Bars
+    //--------------------------------------------------
+
+    const progressBars=document.querySelectorAll(".value");
+
+    progressBars.forEach(bar=>{
+
+        bar.dataset.width=
+
+        getComputedStyle(bar).width;
+
+        bar.style.width="0px";
+
+    });
+
+    const progressObserver=
+
+    new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.style.transition=
+
+                "width 1.6s ease";
+
+                entry.target.style.width=
+
+                entry.target.dataset.width;
+
+            }
+
+        });
+
+    },{
+
+        threshold:.5
+
+    });
+
+    progressBars.forEach(bar=>{
+
+        progressObserver.observe(bar);
+
+    });
 
 });
 
+// ======================================================
+// VH4 Aerospace
+// script.js
+// Part 1
+// ======================================================
 
-/* ==========================================
-   Smooth Reveal
-========================================== */
+document.addEventListener("DOMContentLoaded", () => {
 
-const observer =
-new IntersectionObserver((entries)=>{
+    //--------------------------------------------------
+    // Elements
+    //--------------------------------------------------
 
-entries.forEach(entry=>{
+    const sections = document.querySelectorAll(".panel");
 
-if(entry.isIntersecting){
+    const dots = document.querySelectorAll(".scroll-dots span");
 
-entry.target.classList.add("visible");
+    const navLinks = document.querySelectorAll("nav a");
 
-}
+    //--------------------------------------------------
+    // Add fade class automatically
+    //--------------------------------------------------
 
-});
+    sections.forEach(section => {
 
-},{
-threshold:.15
-});
+        section.classList.add("fade");
 
-document.querySelectorAll(".section,.card")
-.forEach(el=>observer.observe(el));
+    });
 
+    //--------------------------------------------------
+    // Fade Observer
+    //--------------------------------------------------
 
-/* ==========================================
-   Animated Numbers
-========================================== */
+    const fadeObserver = new IntersectionObserver((entries)=>{
 
-const counters =
-document.querySelectorAll(".card h2");
+        entries.forEach(entry=>{
 
-let started=false;
+            if(entry.isIntersecting){
 
-window.addEventListener("scroll",()=>{
+                entry.target.classList.add("show");
 
-if(started) return;
+            }
 
-const trigger =
-document.querySelector(".stats")
-.getBoundingClientRect().top;
+        });
 
-if(trigger<window.innerHeight-120){
+    },{
 
-started=true;
+        threshold:.20
 
-animate();
+    });
 
-}
+    sections.forEach(section=>{
 
-});
+        fadeObserver.observe(section);
 
+    });
 
-function animate(){
+    //--------------------------------------------------
+    // Active Navigation
+    //--------------------------------------------------
 
-animateCounter(
-counters[0],
-120,
-" km");
+    const sectionObserver = new IntersectionObserver((entries)=>{
 
-animateCounter(
-counters[1],
-2.7,
-" min");
+        entries.forEach(entry=>{
 
-}
+            if(!entry.isIntersecting) return;
 
-function animateCounter(el,target,suffix){
+            const id = entry.target.id;
 
-let current=0;
+            //------------------------------
 
-const step=
-target/80;
+            navLinks.forEach(link=>{
 
-const timer=setInterval(()=>{
+                link.classList.remove("active");
 
-current+=step;
+                if(link.getAttribute("href")==="#" + id){
 
-if(current>=target){
+                    link.classList.add("active");
 
-current=target;
+                }
 
-clearInterval(timer);
+            });
 
-}
+            //------------------------------
 
-if(target<10){
+            dots.forEach(dot=>dot.classList.remove("active"));
 
-el.innerHTML=
-current.toFixed(1)+suffix;
+            sections.forEach((section,index)=>{
 
-}else{
+                if(section.id===id){
 
-el.innerHTML=
-Math.floor(current)+suffix;
+                    if(dots[index]){
 
-}
+                        dots[index].classList.add("active");
 
-},20);
+                    }
 
-}
+                }
 
+            });
 
-/* ==========================================
-   Star Twinkle
-========================================== */
+        });
 
-setInterval(()=>{
+    },{
 
-document.getElementById("stars")
-.style.opacity=
-0.75+Math.random()*0.2;
+        threshold:.55
 
-},1800);
+    });
 
+    sections.forEach(section=>{
 
-/* ==========================================
-   Navbar Highlight
-========================================== */
+        sectionObserver.observe(section);
 
-const sections =
-document.querySelectorAll("section");
+    });
 
-const navLinks =
-document.querySelectorAll("nav a");
+    //--------------------------------------------------
+    // Scroll Dots
+    //--------------------------------------------------
 
-window.addEventListener("scroll",()=>{
+    dots.forEach((dot,index)=>{
 
-let current="";
+        dot.addEventListener("click",()=>{
 
-sections.forEach(sec=>{
+            sections[index].scrollIntoView({
 
-const top=
-sec.offsetTop-150;
+                behavior:"smooth"
 
-if(scrollY>=top){
+            });
 
-current=sec.id;
+        });
 
-}
+    });
 
-});
+    //--------------------------------------------------
+    // Navbar Smooth Scroll
+    //--------------------------------------------------
 
-navLinks.forEach(link=>{
+    navLinks.forEach(link=>{
 
-link.classList.remove("active");
+        link.addEventListener("click",(e)=>{
 
-if(link.getAttribute("href")==="#"+current){
+            e.preventDefault();
 
-link.classList.add("active");
+            const target=document.querySelector(
 
-}
+                link.getAttribute("href")
 
-});
+            );
 
-});
-/* ==========================================
-MISSION TIMELINE
-========================================== */
+            if(target){
 
-const timelineRocket =
-document.getElementById("timelineRocket");
+                target.scrollIntoView({
 
-const markers =
-document.querySelectorAll(".marker");
+                    behavior:"smooth"
 
-window.addEventListener("scroll",()=>{
+                });
 
-const maxScroll =
-document.body.scrollHeight-
-window.innerHeight;
+            }
 
-const progress =
-window.scrollY/maxScroll;
+        });
 
-const timelineHeight =
-window.innerHeight*.82;
+    });
 
-const y =
-timelineHeight*(1-progress);
+    //--------------------------------------------------
+    // Counter Animation
+    //--------------------------------------------------
 
-const x =
-Math.sin(progress*Math.PI)*42;
+    const counters=document.querySelectorAll(".counter");
 
-timelineRocket.style.transform=
-`translate(${x}px,${y}px)
- rotate(${-35+progress*70}deg)`;
+    function animateCounter(counter){
 
+        const finalText=counter.innerText;
 
-/* Marker Highlight */
+        const number=parseInt(finalText);
 
-markers.forEach(m=>m.classList.remove("active"));
+        if(isNaN(number)) return;
 
-if(progress<.15){
+        let value=0;
 
-document.querySelector(".launch").classList.add("active");
+        const step=Math.max(1,
 
-}
+            Math.ceil(number/80)
 
-else if(progress<.28){
+        );
 
-document.querySelector(".maxq").classList.add("active");
+        const timer=setInterval(()=>{
 
-}
+            value+=step;
 
-else if(progress<.42){
+            if(value>=number){
 
-document.querySelector(".cutoff").classList.add("active");
+                value=number;
 
-}
+                clearInterval(timer);
 
-else if(progress<.60){
+            }
 
-document.querySelector(".apogee").classList.add("active");
+            counter.innerText=value+
 
-}
+            (finalText.includes("+")?"+":"");
 
-else if(progress<.72){
+        },18);
 
-document.querySelector(".zerog").classList.add("active");
+    }
 
-}
+    const counterObserver=new IntersectionObserver(entries=>{
 
-else if(progress<.90){
+        entries.forEach(entry=>{
 
-document.querySelector(".entry").classList.add("active");
+            if(entry.isIntersecting){
 
-}
+                animateCounter(entry.target);
 
-else{
+                counterObserver.unobserve(entry.target);
 
-document.querySelector(".landing").classList.add("active");
+            }
 
-}
+        });
+
+    },{
+
+        threshold:.5
+
+    });
+
+    counters.forEach(counter=>{
+
+        counterObserver.observe(counter);
+
+    });
+
+    //--------------------------------------------------
+    // Progress Bars
+    //--------------------------------------------------
+
+    const progressBars=document.querySelectorAll(".value");
+
+    progressBars.forEach(bar=>{
+
+        bar.dataset.width=
+
+        getComputedStyle(bar).width;
+
+        bar.style.width="0px";
+
+    });
+
+    const progressObserver=
+
+    new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.style.transition=
+
+                "width 1.6s ease";
+
+                entry.target.style.width=
+
+                entry.target.dataset.width;
+
+            }
+
+        });
+
+    },{
+
+        threshold:.5
+
+    });
+
+    progressBars.forEach(bar=>{
+
+        progressObserver.observe(bar);
+
+    });
 
 });
