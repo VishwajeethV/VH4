@@ -195,3 +195,83 @@ link.classList.add("active");
 });
 
 });
+/* ==========================================
+MISSION TIMELINE
+========================================== */
+
+const timelineRocket =
+document.getElementById("timelineRocket");
+
+const markers =
+document.querySelectorAll(".marker");
+
+window.addEventListener("scroll",()=>{
+
+const maxScroll =
+document.body.scrollHeight-
+window.innerHeight;
+
+const progress =
+window.scrollY/maxScroll;
+
+const timelineHeight =
+window.innerHeight*.82;
+
+const y =
+timelineHeight*(1-progress);
+
+const x =
+Math.sin(progress*Math.PI)*42;
+
+timelineRocket.style.transform=
+`translate(${x}px,${y}px)
+ rotate(${-35+progress*70}deg)`;
+
+
+/* Marker Highlight */
+
+markers.forEach(m=>m.classList.remove("active"));
+
+if(progress<.15){
+
+document.querySelector(".launch").classList.add("active");
+
+}
+
+else if(progress<.28){
+
+document.querySelector(".maxq").classList.add("active");
+
+}
+
+else if(progress<.42){
+
+document.querySelector(".cutoff").classList.add("active");
+
+}
+
+else if(progress<.60){
+
+document.querySelector(".apogee").classList.add("active");
+
+}
+
+else if(progress<.72){
+
+document.querySelector(".zerog").classList.add("active");
+
+}
+
+else if(progress<.90){
+
+document.querySelector(".entry").classList.add("active");
+
+}
+
+else{
+
+document.querySelector(".landing").classList.add("active");
+
+}
+
+});
